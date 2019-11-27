@@ -5,12 +5,11 @@ import ImageHoster.repository.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Service
 public class ImageService {
+
     @Autowired
     private ImageRepository imageRepository;
 
@@ -45,5 +44,8 @@ public class ImageService {
     public void deleteImage(Integer imageId) {
         imageRepository.deleteImage(imageId);
     }
+
+    //This method returns the user_id for a particular imageid
+    public Integer getUserId(Integer imageId) { return imageRepository.getUserId(imageId); }
 
 }

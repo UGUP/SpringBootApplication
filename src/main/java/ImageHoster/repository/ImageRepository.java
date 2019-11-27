@@ -4,6 +4,7 @@ import ImageHoster.model.Image;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 //The annotation is a special type of @Component annotation which describes that the class defines a data repository
@@ -110,4 +111,13 @@ public class ImageRepository {
         }
     }
 
+    public Integer getUserId(Integer imageId) {
+
+        EntityManager em=emf.createEntityManager();
+        TypedQuery<Image> typedQuery=em.createQuery("select i from Image i where i.id=:imageId",Image.class).setParameter("imageId",imageId);
+        Image image = typedQuery.getSingleResult();
+        return image.getUser().getId();
+
+
+    }
 }
