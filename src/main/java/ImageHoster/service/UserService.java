@@ -5,6 +5,9 @@ import ImageHoster.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Service
 public class UserService {
 
@@ -31,5 +34,20 @@ public class UserService {
             return null;
         }
     }
+
+    public boolean passwordValidation(String password) {
+        Pattern pattern;
+        Matcher matcher;
+        String passwordPattern =  "((?=.*\\d)(?=.*[a-zA-Z])(?=.*[@#$%!]).{6,20})";
+        pattern = Pattern.compile(passwordPattern);
+
+        System.out.println("the pattern is ***************************"+pattern);
+        matcher = pattern.matcher(password);
+
+        System.out.println("the matcher is **********************"+matcher);
+        return matcher.matches();
+
+    }
+
 
 }
