@@ -269,6 +269,7 @@ public class ImageControllerTest {
                 .session(session))
                 .andExpect(redirectedUrl("/images"));
     }
+
     //This test checks the controller logic when non owner of the image sends the DELETE request to delete the image and checks whether the Model type object contains the desired attribute with desired value
     @Test
     public void deleteImageWithNonOwnerOfTheImage() throws Exception {
@@ -288,6 +289,7 @@ public class ImageControllerTest {
         UserProfile userProfile1 = new UserProfile();
         userProfile.setId(2);
         userProfile.setEmailAddress("p@gmail.com");
+
         userProfile.setFullName("Prerna");
         userProfile.setMobileNumber("9876543210");
         user.setProfile(userProfile1);
