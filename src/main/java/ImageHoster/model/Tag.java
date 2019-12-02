@@ -21,7 +21,7 @@ public class Tag {
     @Column
     private String name;
 
-    // Write the annotation for many to many between images and tags where they are mapped by tags field in the images table
+
     //The 'tags' table is mapped to 'images' table with Many:Many mapping
     //One image can have multiple categories/tags and there can be multiple images under one category/tag
     //FetchType is LAZY

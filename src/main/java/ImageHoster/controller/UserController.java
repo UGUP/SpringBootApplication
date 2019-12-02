@@ -43,16 +43,20 @@ public class UserController {
     public String registerUser(User user, Model model) {
         String password = user.getPassword();
         String passwordValidationError = "Password must contain atleast 1 alphabet, 1 number & 1 special character";
-        if (userService.passwordValidation(password) == false) {
-            model.addAttribute("User", user);
-            model.addAttribute("passwordTypeError", passwordValidationError);
+        Boolean passwordValidation = passwordValidation(password);
+        String error = "Password must contain atleast 1 alphabet, 1 number & 1 special character";
+        if (passwordValidation) {
+            userService.registerUser(user);
             return "users/login";
         } else {
-            userService.registerUser(user);
-            return "redirect:/users/registration";
+            model.addAttribute("User", user);
+            model.addAttribute("passwordTypeError", passwordValidationError);
+            return "users/registration";
+
         }
 
     }
+
 
     //This controller method is called when the request pattern is of type 'users/login'
     @RequestMapping("users/login")
@@ -88,4 +92,17 @@ public class UserController {
         model.addAttribute("images", images);
         return "index";
     }
+
+
+    public static boolean passwordValidation(String password) {
+        String[] verifyExpression = {".*[a-zA-Z]+.*", // Character
+                ".*[0-9]+.*", // digits
+                ".*[!@#$%^&*(),.?:{}|<>]+.*"// symbols
+        };
+
+        boolean passwordValidation = (password.matches(verifyExpression[0]) && (password.matches(verifyExpression[1]) && password.matches(verifyExpression[2])));
+        return passwordValidation;
+    }
+
+
 }

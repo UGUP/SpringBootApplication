@@ -8,16 +8,13 @@ import ImageHoster.service.CommentService;
 import ImageHoster.service.ImageService;
 import ImageHoster.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -102,26 +99,28 @@ public class ImageController {
     //This string is then displayed by 'edit.html' file as previous tags of an image
     @RequestMapping(value = "/editImage")
     public String editImage(@RequestParam("imageId") Integer imageId, Model model, HttpSession session) {
-        User user = (User) session.getAttribute("loggeduser");
 
+        Image image = imageService.getImage(imageId);
+        model.addAttribute("image", image);
         String error = "Only the owner of the image can edit the image";
-
-        if (!user.getId().equals(imageService.getUserId(imageId))) {
-
-            Image image = imageService.getImage(imageId);
-            model.addAttribute("image", image);
+        Boolean ValidateUser = userValidation(image.getUser(), session);
+        if (!ValidateUser) {
             model.addAttribute("editError", error);
-            return "images/edit";
-
-       } else {
-
-            Image image = imageService.getImage(imageId);
-            String tags = convertTagsToString(image.getTags());
-            model.addAttribute("image", image);
-            model.addAttribute("tags", tags);
             return "images/image";
+        } else {
+            return "images/edit";
         }
 
+    }
+
+    private Boolean userValidation(User user, HttpSession session) {
+
+        User sessionUser = (User) session.getAttribute("loggeduser");
+
+        if (user.getId() == sessionUser.getId()) {
+            return true;
+        } else
+            return false;
 
     }
 
@@ -158,14 +157,14 @@ public class ImageController {
     //Looks for a controller method with request mapping of type '/images'
     @RequestMapping(value = "/deleteImage", method = RequestMethod.DELETE)
     public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId, HttpSession session, Model model) {
-        User user = (User) session.getAttribute("loggeduser");
+
         String deleteError = "Only the owner of the image can delete the image";
         Image image = imageService.getImage(imageId);
-
-          if (!user.getId().equals(imageService.getUserId(image.getId()))) {
-               model.addAttribute("image", image);
-               model.addAttribute("deleteError", deleteError);
-            return "redirect:/images" ;
+        Boolean validUser = userValidation(image.getUser(), session);
+        if (!validUser) {
+            model.addAttribute("deleteError", deleteError);
+            model.addAttribute("image", image);
+            return "images/image";
         } else {
             imageService.deleteImage(imageId);
             return "redirect:/images";

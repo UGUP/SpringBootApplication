@@ -27,7 +27,7 @@ public class Image {
     // Text is a Postgres specific column type that allows you to save
     // text based data that will be longer than 256 characters
     // this is a base64 encoded version of the image
-    @Column(name= "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String imageFile;
 
 
@@ -79,7 +79,6 @@ public class Image {
         this.description = description;
         this.date = date;
     }
-
 
 
     public Integer getId() {
