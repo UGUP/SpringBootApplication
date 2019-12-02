@@ -5,6 +5,8 @@ import ImageHoster.repository.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @Service
 public class TagService {
@@ -18,4 +20,6 @@ public class TagService {
     public Tag createTag(Tag tag) {
         return tagRepository.createTag(tag);
     }
+
+
 }

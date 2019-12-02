@@ -210,7 +210,6 @@ public class ImageControllerTest {
         user.setId(1);
         user.setUsername("Abhi");
         user.setPassword("password1@");
-
         session = new MockHttpSession();
         session.setAttribute("loggeduser", user);
 

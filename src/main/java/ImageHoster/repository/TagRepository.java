@@ -4,6 +4,7 @@ import ImageHoster.model.Tag;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Repository
 public class TagRepository {
@@ -33,4 +34,7 @@ public class TagRepository {
             return null;
         }
     }
+
+
+
 }

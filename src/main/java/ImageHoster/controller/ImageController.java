@@ -99,15 +99,20 @@ public class ImageController {
     //This string is then displayed by 'edit.html' file as previous tags of an image
     @RequestMapping(value = "/editImage")
     public String editImage(@RequestParam("imageId") Integer imageId, Model model, HttpSession session) {
-
         Image image = imageService.getImage(imageId);
+        String tags = convertTagsToString(image.getTags());
+        List<Tag> tag = findOrCreateTags(tags);
+        List<Comment> commentList = commentservice.getComments(image.getId(), image.getTitle());
+        model.addAttribute("comments", commentList);
         model.addAttribute("image", image);
         String error = "Only the owner of the image can edit the image";
         Boolean ValidateUser = userValidation(image.getUser(), session);
         if (!ValidateUser) {
             model.addAttribute("editError", error);
+            model.addAttribute("tags", tag);
             return "images/image";
         } else {
+            model.addAttribute("tags", tags);
             return "images/edit";
         }
 
@@ -157,13 +162,18 @@ public class ImageController {
     //Looks for a controller method with request mapping of type '/images'
     @RequestMapping(value = "/deleteImage", method = RequestMethod.DELETE)
     public String deleteImageSubmit(@RequestParam(name = "imageId") Integer imageId, HttpSession session, Model model) {
-
         String deleteError = "Only the owner of the image can delete the image";
         Image image = imageService.getImage(imageId);
+        String tags = convertTagsToString(image.getTags());
+        List<Tag> tag = findOrCreateTags(tags);
+        List<Comment> commentList = commentservice.getComments(image.getId(), image.getTitle());
+        model.addAttribute("comments", commentList);
+        model.addAttribute("image", image);
+        model.addAttribute("tags", tag);
         Boolean validUser = userValidation(image.getUser(), session);
         if (!validUser) {
             model.addAttribute("deleteError", deleteError);
-            model.addAttribute("image", image);
+
             return "images/image";
         } else {
             imageService.deleteImage(imageId);
@@ -201,7 +211,12 @@ public class ImageController {
     //The method receives the list of all tags
     //Converts the list of all tags to a single string containing all the tags separated by a comma
     //Returns the string
+
     private String convertTagsToString(List<Tag> tags) {
+
+        if (tags == null || tags.isEmpty()) {
+            return "";
+        }
         StringBuilder tagString = new StringBuilder();
 
         for (int i = 0; i <= tags.size() - 2; i++) {
@@ -210,7 +225,6 @@ public class ImageController {
 
         Tag lastTag = tags.get(tags.size() - 1);
         tagString.append(lastTag.getName());
-
         return tagString.toString();
     }
 }
