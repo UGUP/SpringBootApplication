@@ -10,8 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import sun.security.krb5.internal.PAData;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -42,32 +40,17 @@ public class UserController {
     //This controller method is called when the request pattern is of type 'users/registration' and also the incoming request is of POST type
     //This method calls the business logic and after the user record is persisted in the database, directs to login page
     @RequestMapping(value = "users/registration", method = RequestMethod.POST)
-    public String registerUser(User user, @RequestParam(name = "password") String password, Model model) {
-
-      System.out.println("THE PASSWORD ENETRED IS *************"+ password);
-
+    public String registerUser(User user, Model model) {
+        String password = user.getPassword();
         String passwordValidationError = "Password must contain atleast 1 alphabet, 1 number & 1 special character";
-
-       System.out.println("the out is***************************************** "+userService.passwordValidation(password));
-
         if (userService.passwordValidation(password) == false) {
-
-
-            System.out.println("*******************i enter if *********************************");
-
-            model.addAttribute("User",user);
+            model.addAttribute("User", user);
             model.addAttribute("passwordTypeError", passwordValidationError);
-            return "users/registration";
-
-
+            return "users/login";
         } else {
-
             userService.registerUser(user);
-            return "redirect:/users/login";
-
-
+            return "redirect:/users/registration";
         }
-
 
     }
 

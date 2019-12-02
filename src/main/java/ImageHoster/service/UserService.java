@@ -38,13 +38,9 @@ public class UserService {
     public boolean passwordValidation(String password) {
         Pattern pattern;
         Matcher matcher;
-        String passwordPattern =  "((?=.*\\d)(?=.*[a-zA-Z])(?=.*[@#$%!]).{6,20})";
+        String passwordPattern = "((?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&*(),.?:{}|<>]))";
         pattern = Pattern.compile(passwordPattern);
-
-        System.out.println("the pattern is ***************************"+pattern);
         matcher = pattern.matcher(password);
-
-        System.out.println("the matcher is **********************"+matcher);
         return matcher.matches();
 
     }

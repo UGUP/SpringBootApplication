@@ -48,4 +48,5 @@ public class ImageService {
     //This method returns the user_id for a particular imageid
     public Integer getUserId(Integer imageId) { return imageRepository.getUserId(imageId); }
 
+
 }
